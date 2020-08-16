@@ -156,7 +156,7 @@ cargo build --release --no-default-features --features " jemalloc portable sse p
 ...
 Building [==================================>                  ] 58/531
 ```
-看着长长的进度条，等吧，直到出现
+看着长长的进度条，等吧，直到出现如下提示，表示编译成功。
 ```bash
 Finished release [optimized] target(s) in 12m 59s
 ```
@@ -181,7 +181,7 @@ $ nohup ./bin/pd-server --name=pd \
 >                 --peer-urls="http://127.0.0.1:2380" \
 >                 --log-file=pd.log &
 [1] 1025697
-yangsongbao@n231-254-147:~/tidb/pd$ nohup: ignoring input and appending output to 'nohup.out'
+$ nohup: ignoring input and appending output to 'nohup.out'
 
 $ tailf pd.log
 [2020/08/16 09:52:24.145 +00:00] [WARN] [proxy.go:181] ["fail to recv activity from remote, stay inactive and wait to next checking round"] [remote=0.0.0.0:4000] [interval=2s] [error="dial tcp 0.0.0.0:4000: connect: connection refused"]
