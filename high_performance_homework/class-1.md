@@ -158,8 +158,7 @@ Building [==================================>                  ] 58/531
 ```
 看着长长的进度条，等吧，直到出现
 ```bash
-$ ls bin
-tidb-server
+Finished release [optimized] target(s) in 12m 59s
 ```
 ## 部署
 ### 启动方式
