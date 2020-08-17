@@ -237,35 +237,42 @@ $ curl http://127.0.0.1:2379/pd/api/v1/members
 
 ### 启动tikv
 
-按照题目要求，需要部署3个TiKV实例，按照[参考文章](http://www.iocoder.cn/TiKV/build-debugging-environment-second/)，TiKV启动时可以指定启动配置，那么起三个实例应该需要三份配置。看了下TiKV的[配置模板](https://github.com/tikv/tikv/blob/master/etc/config-template.toml)，不同的实例最关键的应该是[server]配置中的[addr]和[status-addr]不要冲突，于是我从配置模板copy出了三份配置，分别修改了上述配置项。
+按照题目要求，需要部署3个TiKV实例，按照[参考文章](http://www.iocoder.cn/TiKV/build-debugging-environment-second/)，TiKV启动时可以指定启动配置，那么起三个实例应该需要三份配置，也需要有自己的存储。看了下TiKV的[配置模板](https://github.com/tikv/tikv/blob/master/etc/config-template.toml)，不同的实例最关键的应该是[server]配置中的[addr]和[status-addr]不要冲突，于是我从copy了三份tikv代码，修改了各自的配置。
 ```bash
-//config-1.toml
+$ pwd
+/home/yangsongbao/tidb
+$ ls
+pd  tidb  tikv1  tikv2	tikv3
+//tikv1/etc/config.toml
 [server]
 addr = "127.0.0.1:20161"
 status-addr = "127.0.0.1:20181"
-//config-2.toml
+//tikv1/etc/config.toml
 [server]
 addr = "127.0.0.1:20162"
 status-addr = "127.0.0.1:20182"
-//config-3.toml
+//tikv1/etc/config.toml
 [server]
 addr = "127.0.0.1:20163"
 status-addr = "127.0.0.1:20183"
 ```
 修改完配置就可以启动了，分别用下面三个命令启动了三个实例
 ```bash
-nohup ./target/debug/tikv-server --config=./etc/config-1.toml --log-file=tikv-1.log &
-nohup ./target/debug/tikv-server --config=./etc/config-2.toml --log-file=tikv-2.log &
-nohup ./target/debug/tikv-server --config=./etc/config-3.toml --log-file=tikv-3.log &
+//tikv1
+nohup ./target/debug/tikv-server --config=./etc/config.toml --log-file=tikv.log &
+//tikv2
+nohup ./target/debug/tikv-server --config=./etc/config.toml --log-file=tikv.log &
+//tikv3
+nohup ./target/debug/tikv-server --config=./etc/config.toml --log-file=tikv.log &
 ```
 在第三个实例启动后，分别在三个实例的日志文件里看到了如下日志，明显是raft在重新选主，TiKV3成为了leader
 
 ```bash
-//TiKV1
+//tikv1
 [2020/08/16 13:24:55.275 +00:00] [INFO] [raft.rs:894] ["became follower at term 12"] [term=12] [raft_id=49] [region_id=48]
-//TiKV2
+//tikv2
 [2020/08/16 13:24:55.275 +00:00] [INFO] [raft.rs:894] ["became follower at term 12"] [term=12] [raft_id=50] [region_id=48]
-//TiKV3
+//tikv3
 [2020/08/16 13:24:55.276 +00:00] [INFO] [raft.rs:985] ["became leader at term 12"] [term=12] [raft_id=51] [region_id=48]
 ```
 
