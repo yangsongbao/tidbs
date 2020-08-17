@@ -247,11 +247,11 @@ pd  tidb  tikv1  tikv2	tikv3
 [server]
 addr = "127.0.0.1:20161"
 status-addr = "127.0.0.1:20181"
-//tikv1/etc/config.toml
+//tikv2/etc/config.toml
 [server]
 addr = "127.0.0.1:20162"
 status-addr = "127.0.0.1:20182"
-//tikv1/etc/config.toml
+//tikv3/etc/config.toml
 [server]
 addr = "127.0.0.1:20163"
 status-addr = "127.0.0.1:20183"
